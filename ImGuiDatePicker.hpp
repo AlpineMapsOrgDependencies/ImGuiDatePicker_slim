@@ -13,7 +13,9 @@
 
 namespace ImGui
 {
-    IMGUI_API bool DatePickerEx(const std::string& label, tm& v, ImFont* altFont, bool clampToBorder = false, float itemSpacing = 130.0f);
+    // format: strftime-style format string for the combo button label (e.g. "%d.%m.%Y").
+    //         Pass nullptr to use the default long-form string ("23 June 2026").
+    IMGUI_API bool DatePickerEx(const std::string& label, tm& v, ImFont* altFont, bool clampToBorder = false, float itemSpacing = 130.0f, const char* format = nullptr);
 
-    IMGUI_API bool DatePicker(const std::string& label, tm& v, bool clampToBorder = false, float itemSpacing = 130.0f);
+    IMGUI_API bool DatePicker(const std::string& label, tm& v, bool clampToBorder = false, float itemSpacing = 130.0f, const char* format = nullptr);
 }

@@ -2,6 +2,7 @@
 #include <imgui_internal.h>
 #include <cstdint>
 #include <chrono>
+#include <ctime>
 #include <vector>
 #include <unordered_map>
 
@@ -224,7 +225,7 @@ namespace ImGui
         return res;
     }
 
-    bool DatePickerEx(const std::string& label, tm& v, ImFont* altFont, bool clampToBorder, float itemSpacing)
+    bool DatePickerEx(const std::string& label, tm& v, ImFont* altFont, bool clampToBorder, float itemSpacing, const char* format)
     {
         bool res = false;
 
@@ -247,7 +248,16 @@ namespace ImGui
         const ImVec2 windowSize = ImVec2(274.5f, 301.5f);
         SetNextWindowSize(windowSize);
 
-        if (BeginCombo(std::string("##" + myLabel).c_str(), TimePointToLongString(v).c_str()))
+        std::string previewStr;
+        if (format) {
+            char buf[64];
+            std::strftime(buf, sizeof(buf), format, &v);
+            previewStr = buf;
+        } else {
+            previewStr = TimePointToLongString(v);
+        }
+
+        if (BeginCombo(std::string("##" + myLabel).c_str(), previewStr.c_str()))
         {
             int monthIdx = GET_MONTH_UNSCALED(v);
             int year = GET_YEAR(v);
@@ -386,8 +396,8 @@ namespace ImGui
         return res;
     }
 
-    bool DatePicker(const std::string& label, tm& v, bool clampToBorder, float itemSpacing)
+    bool DatePicker(const std::string& label, tm& v, bool clampToBorder, float itemSpacing, const char* format)
     {
-        return DatePickerEx(label, v, nullptr, clampToBorder, itemSpacing);
+        return DatePickerEx(label, v, nullptr, clampToBorder, itemSpacing, format);
     }
 }
